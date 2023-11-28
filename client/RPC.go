@@ -40,7 +40,7 @@ type ServerReceiveFile struct {
 }
 
 /*
-	Sent by the Peer to the SwarmMaster when searching for
+	Sent by the Peer to the Server when searching for
 	a file in the network using Peer.SearchForFile().
 */
 type RequestFileArgs struct {
@@ -61,9 +61,9 @@ type RequestFileReply struct {
 }
 
 /*
-	Sent by the SwarmMaster to a Peer indicating the details
+	Sent by the Server to a Peer indicating the details
 	regarding a Peer that possesses a particular file. Used
-	in Peer.SearchForFile() and SwarmMaster.SearchFile().
+	in Peer.SearchForFile() and Server.SearchFile().
 */
 type FindPeerReply struct {
 	PeerID []int
@@ -72,3 +72,16 @@ type FindPeerReply struct {
 	Found  bool
 }
 
+/*
+	RPC for discover 
+*/
+type RequestListFile struct {
+	PeerID 	int
+}
+
+type ListFileReply struct {
+	File 	[]string
+	PeerID 	int
+	NumFiles int
+	Accepted bool
+}

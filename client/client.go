@@ -25,7 +25,7 @@ type Peer struct {
 }
 
 /*
-	A lightweight data type for the SwarmMaster and Peers to
+	A lightweight data type for the Server and Peers to
 	hold relevant information about the Peers connected
 	to it, including their port and the files they posses.
 */
@@ -62,7 +62,7 @@ func call(rpcname string, args interface{}, reply interface{}, port string) bool
 }
 
 /*
-	Method for the Peers to make RPC calls to the SwarmMaster.
+	Method for the Peers to make RPC calls to the Server.
 */
 func serverCall(rpcname string, args interface{}, reply interface{}) bool {
 	c, err := rpc.DialHTTP("tcp", "192.168.32.101:1337")
@@ -182,3 +182,4 @@ func (p *Peer) ConnectPeer(port string, id int) {
 	p.numPeers = p.numPeers + 1
 	fmt.Printf("Connected to Peer %v\n", id)
 }
+

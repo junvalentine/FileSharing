@@ -128,8 +128,8 @@ func (p *Peer) RegisterFile(fileName string, location string) error {
 }
 
 /*
-	Asks the SwarmMaster for a particular file.
-	The SwarmMaster will search the network of Peers
+	Asks the Server for a particular file.
+	The Server will search the network of Peers
 	and find the Peer with the requested file, and
 	then send the connection details back to the
 	requesting Peer.
@@ -185,4 +185,13 @@ func saveFile(fileName string, fileContents []byte, id int, directory string) bo
 	}
 	fmt.Printf("Saved file successfully %v\n", fileName)
 	return true
+}
+
+func (p* Peer) ListFileReply(request *RequestListFile, reply *ListFileReply) error{
+	reply.File = p.files
+	reply.PeerID = p.PeerID
+	reply.NumFiles = p.numFiles
+	reply.Accepted = true
+
+	return nil
 }

@@ -5,6 +5,8 @@ import (
 	"time"
 	"bufio"
 	"os"
+	"strings"
+	"strconv"
 )
 
 func main() {
@@ -20,9 +22,10 @@ func main() {
 	for true {
 
 		fmt.Printf("\nPlease enter a command: \n")
-		fmt.Printf("1. discover [hostname]\n")
-		fmt.Printf("2. ping [hostname]\n")
-		fmt.Printf("3. exit\n")
+		fmt.Printf("1. discover [hostname/PeerID]\n")
+		fmt.Printf("2. ping [hostname/PeerID]\n")
+		fmt.Printf("3. list\n")
+		fmt.Printf("4. exit\n")
 
 		var input string
 		reader := bufio.NewReader(os.Stdin)
@@ -35,10 +38,33 @@ func main() {
 			fmt.Printf("Server shutting down\n")
 			break
 		} else if input[:4] == "ping" {
-			fmt.Printf("incoming\n")
-			//To do
+			words := strings.Split(input, " ")
+			
+			if len(words) != 2 {
+				fmt.Printf("Incorrect command\n")
+			} else {
+				peerID, err := strconv.Atoi(strings.TrimSpace(words[1]))
+				if err != nil {
+					fmt.Printf("Invalid PeerID")
+					continue
+				}
+				m.PingPeer(peerID)
+			}
+		} else if input[:4] == "list"{
+			m.ListPeers()
 		} else if len(input) >= 8 && input[:8] == "discover" {
-			fmt.Printf("incoming\n")
+			words := strings.Split(input, " ")
+			
+			if len(words) != 2 {
+				fmt.Printf("Incorrect command\n")
+			} else {
+				peerID, err := strconv.Atoi(strings.TrimSpace(words[1]))
+				if err != nil {
+					fmt.Printf("Invalid PeerID")
+					continue
+				}
+				m.DiscoverFile(peerID)
+			}
 			//To do
 		} else{
 			fmt.Printf("Incorrect command\n")

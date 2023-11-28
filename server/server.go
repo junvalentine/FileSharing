@@ -1,5 +1,5 @@
 /*
-	This file contains the SwarmMaster structs, functions and RPC handlers.
+	This file contains the Server structs, functions and RPC handlers.
 */
 
 package main
@@ -25,7 +25,7 @@ type Server struct {
 
 /*
 	RPC handler for when a Peer wishes to connect
-	to the SwarmMaster.
+	to the Server.
 */
 func (m *Server) ConnectPeer(request *ConnectRequest, reply *ConnectReply) error {
 	m.mu.Lock()
@@ -44,7 +44,7 @@ func (m *Server) ConnectPeer(request *ConnectRequest, reply *ConnectReply) error
 
 /*
 	Simple function to let us know when the
-	SwarmMaster has successfully been built.
+	Server has successfully been built.
 */
 func (m *Server) Welcome() {
 	fmt.Printf("Welcome to the File-Sharing Application\n")
@@ -53,7 +53,7 @@ func (m *Server) Welcome() {
 /*
 	RPC handler for when a Peer registers a file in
 	the FileShare system to be shareable. This function will
-	update the SwarmMaster's peers data to include the new
+	update the Server's peers data to include the new
 	file.
 */
 func (m *Server) Register(request *PeerSendFile, reply *ServerReceiveFile) error {
@@ -131,4 +131,74 @@ func MakeServer() *Server {
 	m.numPeers = 0
 	m.server()
 	return &m
+}
+
+/* 
+	List all the peer that has connected to server
+*/
+func (m *Server) ListPeers() {
+	fmt.Printf("Num      PeerID      Address\n")
+	for i := 0; i < m.numPeers; i++ {
+		fmt.Printf("%v        %v           %v\n", i+1, m.peers[i].PeerID, "0.0.0.0" + m.peers[i].Port)
+	}
+}
+
+/* 
+	Ping a peer
+*/
+func (m *Server) PingPeer(peerID int) bool{
+	fmt.Printf("Pinging Peer %v\n", peerID)
+	check := 0
+	for i := 0; i < 3; i++ {
+		_ , err := net.Dial("tcp", m.peers[peerID].Port)
+		if err != nil {
+			check += 1
+		}
+	}
+	if check == 3 {
+		fmt.Printf("Peer not live!\n")
+		return false
+	} else{
+		fmt.Printf("%v/3 connection success\n", 3 - check)
+		fmt.Printf("Peer live!\n")
+		return true
+	}
+}
+/* 
+	Discover all file in local repo of a peer
+*/
+func (m *Server) DiscoverFile(peerID int) {
+	fmt.Printf("Discovering file in Peer %v\n", peerID)
+	check := m.PingPeer(peerID)
+	if check == false{
+		return
+	}
+
+	request := RequestListFile{}
+	reply := ListFileReply{}
+	reply.Accepted = false
+
+	call("Peer.ListFileReply", &request, &reply, m.peers[peerID].Port)
+	if reply.Accepted == true {
+		fmt.Printf("Num      Files\n")
+		for i := 0; i < reply.NumFiles; i++ {
+			fmt.Printf("%v        %v\n", i+1, reply.File[i])
+		}
+	}
+	return 
+}
+
+func call(rpcname string, args interface{}, reply interface{}, port string) bool {
+	c, err := rpc.DialHTTP("tcp", port)
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+	defer c.Close()
+
+	err = c.Call(rpcname, args, reply)
+	if err == nil {
+		return true
+	}
+	fmt.Println(err)
+	return false
 }
