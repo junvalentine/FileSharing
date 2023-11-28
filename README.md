@@ -1,2 +1,2 @@
 # FileSharing
-A simple file-sharing application implemented in Goland
+A simple file-sharing application implemented in Golang
