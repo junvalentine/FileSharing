@@ -65,7 +65,7 @@ func call(rpcname string, args interface{}, reply interface{}, port string) bool
 	Method for the Peers to make RPC calls to the Server.
 */
 func serverCall(rpcname string, args interface{}, reply interface{}) bool {
-	c, err := rpc.DialHTTP("tcp", "192.168.32.101:1337")
+	c, err := rpc.DialHTTP("tcp", "192.168.68.108:1337")
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}

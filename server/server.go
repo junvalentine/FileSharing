@@ -10,8 +10,10 @@ import (
 	"net"
 	"net/http"
 	"net/rpc"
+	"os"
+	"strconv"
 	"sync"
-
+	"time"
 )
 
 /*
@@ -27,17 +29,46 @@ type Server struct {
 	RPC handler for when a Peer wishes to connect
 	to the Server.
 */
+
+func GetTime () string{
+	now := time.Now()
+	time := now.Format("02/01/2006 15:04:05")
+	return time
+}
+
+func auditLog (message string) {
+	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE, 0664)
+	if err != nil {
+		fmt.Printf("Error creating the file: %v\n", err)
+	}
+	if err != nil {
+		fmt.Printf("Error creating the file: %v\n", err)
+
+	}
+	content, err := os.ReadFile("log.txt")
+	if err != nil {
+		fmt.Printf("Error reading the file: %v\n", err)
+
+	}
+	l, err := f.WriteString(string(content) + GetTime() + ": " + message + "\n")
+	if err != nil {
+		fmt.Printf("Error writing the file: %v %v\n", err, l)
+	}
+}
+
 func (m *Server) ConnectPeer(request *ConnectRequest, reply *ConnectReply) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 
 	reply.Accepted = true
 	reply.PeerID = m.numPeers
+
 	m.peers[m.numPeers].PeerID = m.numPeers
 	m.peers[m.numPeers].Port = request.Port
 	m.peers[m.numPeers].isConnected = true
-	fmt.Printf("Connected to Peer: %v\n", m.numPeers)
 
+	auditLog("Connected to Peer: " + strconv.Itoa(m.numPeers))
+	// fmt.Printf("Connected to Peer: %v\n", m.numPeers)
 	m.numPeers = m.numPeers + 1
 	return nil
 }
@@ -69,7 +100,8 @@ func (m *Server) Register(request *PeerSendFile, reply *ServerReceiveFile) error
 			m.peers[i].numFiles++
 			// m.peers[i].Fileloc[m.peers[i].numFiles] = request.location
 			reply.Accepted = true
-			fmt.Printf("Registered %v from Peer %v\n", request.FileName, request.PeerID)
+			auditLog("Registered " + request.FileName + " from Peer " + strconv.Itoa(request.PeerID) + "\n")
+			// fmt.Printf("Registered %v from Peer %v\n", request.FileName, request.PeerID)
 			break
 		}
 	}
@@ -89,14 +121,17 @@ func (m *Server) SearchFile(request *RequestFileArgs, reply *FindPeerReply) erro
 
 	reply.Found = false
 	reply.File = request.File
-	fmt.Printf("Peer %v requested a search for file %v\n", request.PeerID, request.File)
+	auditLog("Peer " + strconv.Itoa(request.PeerID) + " requested a search for file " + request.File + "\n")
+
+	// fmt.Printf("Peer %v requested a search for file %v\n", request.PeerID, request.File)
 	for i := 0; i < m.numPeers; i++ {
 		for j := 0; j < m.peers[i].numFiles; j++ {
 			if request.File == m.peers[i].Files[j] {
 				reply.Found = true
 				reply.PeerID = append(reply.PeerID,m.peers[i].PeerID)
 				reply.Port = append(reply.Port,m.peers[i].Port)
-				fmt.Printf("Found file %v for Peer %v on Peer %v\n", request.File, request.PeerID, m.peers[i].PeerID)
+				auditLog("Found file " + request.File + "for Peer " + strconv.Itoa(request.PeerID) + " on Peer "+ strconv.Itoa(m.peers[i].PeerID)+"\n")
+				// fmt.Printf("Found file %v for Peer %v on Peer %v\n", request.File, request.PeerID, m.peers[i].PeerID)
 			}
 		}
 	}

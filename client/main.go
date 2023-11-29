@@ -11,11 +11,11 @@ import (
 func main() {
 	var port string
 	fmt.Printf("Please enter a port number: ")
-	fmt.Scanf("%s", &port)
+	fmt.Scanf("%s\n", &port)
 
 	var loc string
 	fmt.Printf("Please enter your local repository location: ")
-	fmt.Scanf("%s", &loc)
+	fmt.Scanf("%s\n", &loc)
 
 	start := time.Now()
 	p := MakePeer(loc, ":"+ port)

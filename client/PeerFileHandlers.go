@@ -18,14 +18,17 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 /*
 	Requests a given file from a given Peer.
 */
+
+var startCounter time.Time
+
 func (p *Peer) RequestFile(port string, id int, file string) bool {
 	requestFileArgs := RequestFileArgs{}
 	requestFileReply := RequestFileReply{}
@@ -83,7 +86,7 @@ func (p *Peer) ServeFile(request *RequestFileArgs, reply *RequestFileReply) erro
                 reply.FileExists = true
                 reply.File = p.files[i]
                 location := p.fileloc[i]
-                f, err := ioutil.ReadFile(location + request.File)
+                f, err := os.ReadFile(location + request.File)
                 if err != nil {
                     fmt.Printf("Error reading file: %v\n", err)
                 }
@@ -134,6 +137,15 @@ func (p *Peer) RegisterFile(fileName string, location string) error {
 	then send the connection details back to the
 	requesting Peer.
 */
+func findPeerID(a []int, x int) int {
+	for i, n := range a {
+		if x == n {
+			return i
+		}
+	}
+	return -1
+}
+
 func (p *Peer) SearchForFile(fileName string) error {
 	p.mu.Lock()
 
@@ -142,7 +154,7 @@ func (p *Peer) SearchForFile(fileName string) error {
 	request.File = fileName
 	request.PeerID = p.PeerID
 	serverCall("Server.SearchFile", &request, &reply)
-
+	var id int
 	if reply.Found {
 		fmt.Printf("Num      PeerID\n")
 		for i := 0; i < len(reply.PeerID); i++ {
@@ -150,14 +162,24 @@ func (p *Peer) SearchForFile(fileName string) error {
 		}
 
 		fmt.Printf("Please choose a PeerID to connect to: ")
-		var id int
-		fmt.Scanf("%d", &id)
-
-		p.ConnectPeer(reply.Port[id], reply.PeerID[id])
-		save := p.RequestFile(reply.Port[id], reply.PeerID[id], reply.File)
-		p.mu.Unlock()
-		if save == true{
-			p.RegisterFile(reply.File, p.directory)
+		fmt.Scanf("%d\n", &id)
+		if p.PeerID != id{
+			startCounter = time.Now()
+			index := findPeerID(reply.PeerID, id)
+			if  index != - 1{
+				p.ConnectPeer(reply.Port[index], reply.PeerID[index])
+				save := p.RequestFile(reply.Port[index], reply.PeerID[index], reply.File)
+				p.mu.Unlock()
+				if save == true{
+					p.RegisterFile(reply.File, p.directory)
+				}
+			} else {
+				fmt.Printf("PeerID %v did not publish file %v!\n", id, fileName)
+				p.mu.Unlock()
+			}
+		} else{
+			fmt.Printf("Can not fetch own PeerID %v!\n", id)
+			p.mu.Unlock()
 		}
 	} else{
 		fmt.Printf("File %v not found\n", fileName)
@@ -183,7 +205,13 @@ func saveFile(fileName string, fileContents []byte, id int, directory string) bo
 		fmt.Printf("Error writing the file: %v %v\n", err, l)
 		return false
 	}
-	fmt.Printf("Saved file successfully %v\n", fileName)
+	endCounter := time.Now()
+	timer := endCounter.Sub(startCounter)
+	if directory == ""{
+		fmt.Printf("Saved file %v successfully in %v\n", fileName, timer)
+	} else{
+		fmt.Printf("Saved file %v to %v successfully in %v\n", fileName, directory,timer)
+	}
 	return true
 }
 
