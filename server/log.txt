@@ -1,67 +1,44 @@
-30/11/2023 05:05:27: Connected to Peer: 0
-30/11/2023 05:07:55: Connected to Peer: 0
-30/11/2023 05:08:21: Registered test.txt from Peer 0
+30/11/2023 16:27:46: Connected to Peer: 1
+30/11/2023 16:27:53: Connected to Peer: 2
+30/11/2023 16:28:24: Registered test.txt from Peer 1
 
-30/11/2023 05:10:26: Connected to Peer: 1
-30/11/2023 05:10:32: Peer 1 requested a search for file test.txt
+30/11/2023 16:28:28: Registered test.txt from Peer 1
 
-30/11/2023 05:10:53: Peer 1 requested a search for file test.txt
+30/11/2023 16:28:53: Peer 2 requested a search for file test.txt
 
-30/11/2023 05:11:01: Registered test.txt from Peer 1
+30/11/2023 16:28:53: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:14:35: Connected to Peer: 0
-30/11/2023 05:14:49: Registered test.txt from Peer 0
+30/11/2023 16:28:53: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:15:21: Connected to Peer: 1
-30/11/2023 05:15:27: Peer 1 requested a search for file test.txt
+30/11/2023 16:28:59: Registered test.txt from Peer 2
 
-30/11/2023 05:15:27: Found file test.txtfor Peer 1 on Peer 0
+30/11/2023 16:29:03: Peer 2 requested a search for file test.txt
 
-30/11/2023 05:15:33: Registered test.txt from Peer 1
+30/11/2023 16:29:03: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:18:27: Connected to Peer: 0
-30/11/2023 05:19:00: Registered test.txt from Peer 0
+30/11/2023 16:29:03: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:19:15: Connected to Peer: 1
-30/11/2023 05:19:27: Connected to Peer: 2
-30/11/2023 05:19:37: Peer 2 requested a search for file test.txt
+30/11/2023 16:29:03: Found file test.txtfor Peer 2 on Peer 2
 
-30/11/2023 05:19:37: Found file test.txtfor Peer 2 on Peer 0
+30/11/2023 16:29:07: Registered test.txt from Peer 2
 
-30/11/2023 05:19:42: Registered test.txt from Peer 2
+30/11/2023 16:29:15: Peer 2 requested a search for file test.txt
 
-30/11/2023 05:22:32: Peer 2 requested a search for file test
+30/11/2023 16:29:15: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:22:38: Peer 2 requested a search for file test.txt
+30/11/2023 16:29:15: Found file test.txtfor Peer 2 on Peer 1
 
-30/11/2023 05:22:38: Found file test.txtfor Peer 2 on Peer 0
+30/11/2023 16:29:15: Found file test.txtfor Peer 2 on Peer 2
 
-30/11/2023 05:22:38: Found file test.txtfor Peer 2 on Peer 2
+30/11/2023 16:29:15: Found file test.txtfor Peer 2 on Peer 2
 
-30/11/2023 05:27:03: Connected to Peer: 0
-30/11/2023 05:27:16: Registered test.txt from Peer 0
+30/11/2023 16:42:47: Connected to Peer: 0
+30/11/2023 16:42:55: Connected to Peer: 1
+30/11/2023 16:43:11: Registered test.txt from Peer 0
 
-30/11/2023 05:27:24: Peer 0 requested a search for file test.txt
+30/11/2023 16:43:16: Peer 1 requested a search for file test.txt
 
-30/11/2023 05:27:24: Found file test.txtfor Peer 0 on Peer 0
+30/11/2023 16:43:16: Found file test.txtfor Peer 1 on Peer 0
 
-30/11/2023 05:29:30: Connected to Peer: 1
-30/11/2023 05:29:43: Registered test.txt from Peer 1
-
-30/11/2023 05:29:49: Peer 1 requested a search for file test.txt
-
-30/11/2023 05:29:49: Found file test.txtfor Peer 1 on Peer 0
-
-30/11/2023 05:29:49: Found file test.txtfor Peer 1 on Peer 1
-
-30/11/2023 05:30:48: Connected to Peer: 2
-30/11/2023 05:30:59: Registered test.txt from Peer 2
-
-30/11/2023 05:31:04: Peer 2 requested a search for file test.txt
-
-30/11/2023 05:31:04: Found file test.txtfor Peer 2 on Peer 0
-
-30/11/2023 05:31:04: Found file test.txtfor Peer 2 on Peer 1
-
-30/11/2023 05:31:04: Found file test.txtfor Peer 2 on Peer 2
+30/11/2023 16:43:18: Registered test.txt from Peer 1
 

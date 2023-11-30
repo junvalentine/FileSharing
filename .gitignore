@@ -1,3 +1,5 @@
 # .gitignore
 client/client
 server/server
+client.exe
+server.exe

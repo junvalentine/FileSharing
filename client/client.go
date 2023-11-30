@@ -24,21 +24,6 @@ type Peer struct {
 	mu        sync.Mutex
 }
 
-/*
-	A lightweight data type for the Server and Peers to
-	hold relevant information about the Peers connected
-	to it, including their port and the files they posses.
-*/
-type PeerInfo struct {
-	PeerID      int
-	Port        string
-	Files       [100]string
-	// Fileloc		[100]string
-	numFiles    int
-	isConnected bool
-}
-
-
 func (m *Peer) Welcome() {
 	fmt.Printf("Welcome to the File-Sharing Application\n")
 }
@@ -165,6 +150,7 @@ func (p *Peer) AcceptConnect(request *ConnectRequest, reply *ConnectReply) error
     <-done // wait for the goroutine to send a value
     return nil
 }
+
 /*
 	Connects the Peer to the provided Peer.
 */
